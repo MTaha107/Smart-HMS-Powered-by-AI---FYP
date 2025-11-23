@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import AdminDashboard from './pages/AdminDashboard';
 import PatientDashboard from './pages/PatientDashboard';
 import AiDoc from './pages/AiDoc';
+import Message from './pages/Message';
 
 function App() {
 
@@ -34,6 +35,10 @@ function App() {
 
       <Routes>
         <Route path="/aiDoc" element={<AiDoc />} />
+      </Routes>
+
+      <Routes>
+        <Route path="/message" element={<Message />} />
       </Routes>
      </Router>
     </>

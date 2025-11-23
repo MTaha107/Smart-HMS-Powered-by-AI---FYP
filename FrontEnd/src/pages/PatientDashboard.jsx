@@ -42,7 +42,7 @@ const removedoctor = async (id) => {
                   <p className="text-[#0d141c] text-[17px] font-bold">Go to home page</p>
                   </div></Link>
 
-                  <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                  <Link to="/message">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Message</p>
                   </div></Link>
 
