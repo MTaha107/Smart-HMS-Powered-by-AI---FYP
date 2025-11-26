@@ -11,13 +11,19 @@ const PatientDashboard = () => {
                                             startingHour: 10,
                                             endingHour: 18,
                                           }] );
-  
-    const [hireddoctors, setHireddoctors] = useState([]);  
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState(''); 
+    const [popUp, setPopUp] = useState(false);
 
 
 
 const adddoctor = async(id) => {
+  setPopUp(true);
 };
+
+const bookappointment = async(id) => {
+  setPopUp(false);
+}
 
 const removedoctor = async (id) => {
 };
@@ -38,9 +44,6 @@ const removedoctor = async (id) => {
                    </div>
               </div>
               <div className="flex flex-col gap-2">
-                  <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
-                  <p className="text-[#0d141c] text-[17px] font-bold">Go to home page</p>
-                  </div></Link>
 
                   <Link to="/message">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Message</p>
@@ -48,6 +51,10 @@ const removedoctor = async (id) => {
 
                   <Link to="/aiDoc">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Ai Doc</p>
+                  </div></Link>
+
+                  <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                  <p className="text-[#0d141c] text-[17px] font-bold">Log Out</p>
                   </div></Link>
               </div>
             </div>
@@ -65,7 +72,7 @@ const removedoctor = async (id) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4">
             {/* doctors */}
             <div className="flex flex-col gap-2 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
-              <p className="text-base font-bold">Available Doctors</p>
+              <p className="text-base font-bold">Request/Book Appointments</p>
               <p className="text-2xl font-bold">{doctors.filter((d) => d.ishired === false ) .length}</p>
               <div className="space-y-2 mt-2">
                 {doctors.filter((d) => d.ishired === false ) 
@@ -78,6 +85,35 @@ const removedoctor = async (id) => {
                 </div>
                     <div className="flex gap-3">
                       <button onClick={() => adddoctor(doctor._id)} className="text-green-600 hover:text-green-800 cursor-pointer">➕</button>
+
+
+{
+  popUp?
+  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-40">
+{/* Box For Date and time */}
+    <div className="flex flex-col gap-4 fixed bg-gray-500 rounded-lg p-4 shadow-lg">
+      <button className="text-green-600 hover:text-green-800 cursor-pointer" onClick={()=> setPopUp(false)}>❌</button>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="border p-2 rounded text-white"
+      />
+
+      <input
+        type="time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+        className="border p-2 rounded text-white"
+      />
+
+      <p className='text-white'>You selected: {date} {time}</p>
+      <button className="text-white bg-black rounded-lg p-2 hover:text-gray-800 cursor-pointer" onClick={()=> bookappointment()}> OK </button>
+    </div>
+</div>
+:null
+}
+
                     </div>
                   </div>
                 ))}
@@ -88,7 +124,7 @@ const removedoctor = async (id) => {
 
             {/* Hired  doctors */}
          <div className="flex flex-col gap-4 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
-  <p className="text-base font-bold">Appointment with doctor</p>
+  <p className="text-base font-bold">Your Appointments</p>
   {doctors.map((doctor) => (
     <div key={doctor._id} className="flex items-center justify-between bg-gray-100 p-2 rounded border-b pb-2 last:border-none">
       <div className='text-left'>
