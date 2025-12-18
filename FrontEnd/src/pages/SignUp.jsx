@@ -1,13 +1,13 @@
-import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import logo from "../assets/images/logo.png";
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const SignUp = () => {
 
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
-  const [LoginRole, setLoginRole] = useState("Patient");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,19 +15,35 @@ const SignUp = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    loginRole: "patient",
   });
-
 
    const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (formData.password !== formData.confirmPassword) {
       return setError("Passwords do not match!");
+    }
+
+      try {
+      setLoading(true);
+      const res = await axios.post(`${API}/users/register`, {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        role: formData.loginRole, 
+      });
+
+        navigate('/login');      
+    } catch (err) {
+      console.error("Signup error:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -117,14 +133,14 @@ const SignUp = () => {
   <div className='flex w-full flex-col flex-wrap  gap-4 px-4 py-3'>
   <label htmlFor="loginRole">Sign up as:</label>
   <select
-  id="LoginRole"
-  name="LoginRole"
-  value={LoginRole}
-  onChange={(e) => setLoginRole(e.target.value)}
+  id="loginRole"
+  name="loginRole"
+  value={formData.loginRole}
+  onChange={handleChange}
   className="form-input flex w-full flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-[#e7edf4] h-12 sm:h-14 placeholder:text-[#49739c] p-3 sm:p-4 text-sm sm:text-base"
 >
-  <option value="farmer">Patient</option>
-  <option value="requestAdmin">Request for Doctor/admin</option>
+  <option value="patient">Patient</option>
+  <option value="requestDoc">Request for Doctor</option>
 </select>
 
   </div>

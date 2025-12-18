@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { Link,} from 'react-router-dom';
+import { Link, Navigate, useNavigate} from 'react-router-dom';
 import logo from "../assets/images/logo.png";
 
 const PatientDashboard = () => {
   
+    const navigate = useNavigate();
     const [doctors, setdoctors] = useState([{name: "Unknown",
                                             fees: 200,
                                             ishired: false,
@@ -15,6 +16,11 @@ const PatientDashboard = () => {
     const [time, setTime] = useState(''); 
     const [popUp, setPopUp] = useState(false);
 
+
+    const logout = () => {
+      localStorage.removeItem('token');
+      navigate('/');
+    }
 
 
 const adddoctor = async(id) => {
@@ -53,9 +59,9 @@ const removedoctor = async (id) => {
                   <p className="text-[#0d141c] text-[17px] font-bold">Ai Doc</p>
                   </div></Link>
 
-                  <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                  <button onClick={()=>logout()}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Log Out</p>
-                  </div></Link>
+                  </div></button>
               </div>
             </div>
           </div>

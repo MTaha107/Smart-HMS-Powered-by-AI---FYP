@@ -2,12 +2,13 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import axios from 'axios';
 
 const Login = () => {
 
 
-   const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const API = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,6 +19,42 @@ const Login = () => {
       setError('Please enter username and password');
       return;
     }
+
+     try {
+          const res = await axios.post(`${API}/users/login`, {
+            username,
+            password
+          });
+    
+            const { token } = res.data;
+            localStorage.setItem('token', token);
+
+
+            
+            // 2️⃣ Get user info from token
+            const profileRes = await axios.get(`${API}/users/profile`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+
+            const { role, id } = profileRes.data.user;
+
+      
+          if (role === 'admin') {
+            navigate('/adminDashboard');
+          }  else if (role === 'patient') {
+            navigate(`/patientDashboard?id=${id}`);
+          }else if (role === 'doctor') {
+            navigate(`/docDashboard?id=${id}`);
+          } else {
+            setError('Unknown user role');
+          }
+    
+        } catch (err) {
+          console.error('Login error:', err.response?.data || err);
+          setError(err.response?.data?.error || 'Login failed');
+        }
   }
 
 

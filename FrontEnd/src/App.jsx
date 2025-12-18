@@ -16,33 +16,12 @@ function App() {
      <Router>
       <Routes>
         <Route index element={<Home />} />
-      </Routes>
-
-      <Routes>
         <Route path="/login" element={<Login />} />
-      </Routes>
-
-      <Routes>
         <Route path="/signup" element={<SignUp />} />
-      </Routes>
-
-      <Routes>
         <Route path="/adminDashboard" element={<AdminDashboard />} />
-      </Routes>
-
-      <Routes>
         <Route path="/patientDashboard" element={<PatientDashboard />} />
-      </Routes>
-
-      <Routes>
         <Route path="/aiDoc" element={<AiDoc />} />
-      </Routes>
-
-      <Routes>
         <Route path="/message" element={<Message />} />
-      </Routes>
-
-      <Routes>
         <Route path="/docDashboard" element={<DocDashboard />} />
       </Routes>
      </Router>
