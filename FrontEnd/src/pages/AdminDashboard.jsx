@@ -97,7 +97,7 @@ const removeDoctor = (id) => {
               </div>
               <div className="flex flex-col gap-2">
                <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
-                                 <p className="text-[#0d141c] text-[17px] font-bold">Go to home page</p>
+                                 <p className="text-[#0d141c] text-[17px] font-bold">Log out</p>
                                 </div></Link>
                 
               </div>
@@ -125,7 +125,7 @@ const removeDoctor = (id) => {
             onChange={(e) => setDoctorName(e.target.value)}
             placeholder="Enter name for Doctor" 
             type="text" 
-            className="bg-gray-600 text-white rounded hover:bg-gray-700 text-sm" />
+            className="bg-gray-200 p-2 rounded hover:bg-gray-400 text-sm" />
   
   <hr />
     <label htmlFor={doctorPassword}>Enter Doctor's Password</label>
@@ -133,7 +133,7 @@ const removeDoctor = (id) => {
             onChange={(e) => setDoctorPassword(e.target.value)}
             placeholder="Enter Password for Doctor" 
             type="text" 
-            className="bg-gray-600 text-white rounded hover:bg-gray-700 text-sm" />
+            className="bg-gray-200 p-2 rounded hover:bg-gray-400 text-sm" />
   
   <button
     onClick={addDoctor}
