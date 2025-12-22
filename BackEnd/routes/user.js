@@ -77,37 +77,32 @@ router.get('/profile', protect, (req, res) => {
   });
 });
 
-
-// ---------------- GET ALL DOCTORS (SECURE) ----------------
-// router.get('/doctors', protect, async (req, res) => {
-//   try {
-//     const doctors = await User.find({ role: 'doctor' })
-//       .select('name fees specialization');
-
-//     res.json(doctors);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Server error' });
-//   }
-// });
-
-
-// ---------------- GET ALL USERS (No Token Needed) ----------------
-router.get('/all', async (req, res) => {
+// ---------------- to get doctors in admin ----------------
+router.get('/doctors', protect, async (req, res) => {
   try {
-    // 🔓 No authentication check — accessible to everyone
-    const users = await User.find().select('-password'); // exclude password
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    // Only admin allowed
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const doctors = await User.find({ role: 'doctor' })
+      .select('_id name role');
+
+    res.json(doctors);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
 
 // ---------------- DELETE USER ----------------
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id",protect, async (req, res) => {
   try {
+     // Only admin can delete users
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });

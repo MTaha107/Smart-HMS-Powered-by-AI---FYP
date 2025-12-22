@@ -68,7 +68,7 @@ const SignUp = () => {
         <div className="flex flex-1 justify-center py-5 px-4 sm:px-8 md:px-20 lg:px-40">
           <div className="flex w-full max-w-[512px] flex-col py-5">
             <h2 className="pb-3 pt-5 text-center text-black text-[22px] sm:text-[26px] md:text-[28px] font-bold leading-tight">
-              Sign up 
+              Sign up as patient
             </h2>
 
             <form onSubmit={handleSubmit}>
@@ -127,24 +127,6 @@ const SignUp = () => {
                   />
                 </label>
               </div>
-
-              
-{/* dropbox for farmer or owner login */}
-  <div className='flex w-full flex-col flex-wrap  gap-4 px-4 py-3'>
-  <label htmlFor="loginRole">Sign up as:</label>
-  <select
-  id="loginRole"
-  name="loginRole"
-  value={formData.loginRole}
-  onChange={handleChange}
-  className="form-input flex w-full flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-[#e7edf4] h-12 sm:h-14 placeholder:text-[#49739c] p-3 sm:p-4 text-sm sm:text-base"
->
-  <option value="patient">Patient</option>
-  <option value="requestDoc">Request for Doctor</option>
-</select>
-
-  </div>
-
               
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
