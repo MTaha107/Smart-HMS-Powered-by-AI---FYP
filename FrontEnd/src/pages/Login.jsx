@@ -27,26 +27,21 @@ const Login = () => {
           });
     
             const { token } = res.data;
-            localStorage.setItem('token', token);
-
-
-            
+            localStorage.setItem('token', token);            
             // 2️⃣ Get user info from token
             const profileRes = await axios.get(`${API}/users/profile`, {
               headers: {
                 Authorization: `Bearer ${token}`
               }
             });
+            const { role, id , name} = profileRes.data.user;
 
-            const { role, id } = profileRes.data.user;
-
-      
           if (role === 'admin') {
             navigate('/adminDashboard');
           }  else if (role === 'patient') {
-            navigate(`/patientDashboard?id=${id}`);
+            navigate(`/patientDashboard?id=${name}`);
           }else if (role === 'doctor') {
-            navigate(`/docDashboard?id=${id}`);
+            navigate(`/docDashboard?id=${name}`);
           } else {
             setError('Unknown user role');
           }

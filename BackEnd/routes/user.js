@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/UserData');
 require('dotenv').config();
 const express = require('express');
-const { MongoServerClosedError } = require('mongodb');
 const router = express.Router();
 const protect = require('../middleware/authmiddleware');
 
@@ -23,7 +22,6 @@ router.post('/register', async (req, res) => {
         const existingUser = await User.findOne({name: username });
         if (existingUser) return res.status(400).json({ error: 'User already exists' });
 
-      
         const userRole = role;
 
         const salt = await bcrypt.genSalt(10);
@@ -50,7 +48,7 @@ router.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, role: user.role, name: user.name },
             process.env.JWT_SECRET,
             { expiresIn: process.env.TOKEN_EXPIRES_IN || '1d' } 
         );

@@ -24,6 +24,8 @@ connectDB();
 
 const userRoutes = require('./routes/user');
 app.use('/users', userRoutes);
+const doctorsDataRoutes = require('./routes/doctorsData');
+app.use('/doctorsData', doctorsDataRoutes);
 
 app.get('/', (req, res) => res.send('HMS API Running'));
 

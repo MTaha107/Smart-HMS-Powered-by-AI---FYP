@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 const AdminDashboard = () => {
 
   const API = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [doctorName, setDoctorName] = useState("");
   const [doctorPassword, setDoctorPassword] = useState("");
@@ -15,7 +16,6 @@ const AdminDashboard = () => {
 
   const fetchDoctors = async () => {
   const token = localStorage.getItem("token");
-
   try {
     const res = await axios.get(`${API}/users/doctors`, {
       headers: {
@@ -76,6 +76,10 @@ const removeDoctor = (id) => {
 };
 
 
+const LogOut = () => {
+  localStorage.removeItem("token");
+  navigate("/login");
+}
 
 
   return (
@@ -96,9 +100,9 @@ const removeDoctor = (id) => {
                
               </div>
               <div className="flex flex-col gap-2">
-               <Link to="/">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+               <button onClick={()=>LogOut()}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                                  <p className="text-[#0d141c] text-[17px] font-bold">Log out</p>
-                                </div></Link>
+                                </div></button>
                 
               </div>
             </div>
