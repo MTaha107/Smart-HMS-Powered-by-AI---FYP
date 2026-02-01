@@ -53,6 +53,24 @@ router.get('/allDoctorsData' , async (req, res) => {
   }
 });
 
+// ---------------- Update its status ----------------
+router.patch('/updateStatus/:id', async (req, res) => {
+  try {
+    const { requeststatus } = req.body;
+
+    const updated = await DoctorsData.findByIdAndUpdate(
+      req.params.id,
+      { requeststatus },   // ONLY this field updates
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 // ---------------- DELETE Dr Data ----------------
 router.delete("/delete/:id", async (req, res) => {
   try {

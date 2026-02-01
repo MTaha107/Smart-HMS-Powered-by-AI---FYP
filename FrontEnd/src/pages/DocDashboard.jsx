@@ -63,9 +63,22 @@ export default function DocDashboard() {
  }
 
  const addpatient = async(id) => {
+    try {
+    await axios.patch(`${API}/doctorsData/updateStatus/${id}`, {
+      requeststatus: "accepted"
+    });
+    fetchDoctors(); 
+  } catch (err) {
+    console.error(err);
+  }
  };
  
  const removepatient = async (id) => {
+    axios.delete(`${API}/doctorsData/delete/${id}`, {})
+  .then(() => {
+    setDoctors(prev => prev.filter(doctor => doctor._id !== id));
+  })
+  .catch(err => console.error(err.response?.data || err.message));
  };
  
  const LogOut = () => {
@@ -85,13 +98,13 @@ export default function DocDashboard() {
                <div className="flex  justify-center items-center gap-3 mb-6 mt-4">
                 <div className="flex flex-col items-center space-x-2">
                       <img src={drpfp} alt="Logo" className="w-20 h-20 rounded-full mb-3" />
-                      <p className='text-black font-bold'>Dr Mario</p>
+                      <p className='text-black font-bold'>{id}</p>
                     </div>
                </div>
                
                <div className="flex flex-col gap-2">
  
-                   <Link to="/message">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                   <Link to={`/message?id=${id}&role=doctor`}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                    <p className="text-[#0d141c] text-[17px] font-bold">Message</p>
                    </div></Link>
 
@@ -154,7 +167,7 @@ export default function DocDashboard() {
           <div className="flex flex-col gap-4 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
    <p className="text-base font-bold">Your Info</p>
    <hr />
-  {doctors.filter((e) => e.requeststatus === "none").map((e)=>{
+  {doctors.filter((e) => e.name === id && e.requeststatus === "none").map((e)=>{
     return (<div className='bg-gray-200  p-2 rounded-l flex justify-between'>
     <div className='flex flex-col items-start gap-2'>
     <p className='text-l font-bold'>Starting Hour:{e.startingHour}</p>
@@ -183,12 +196,13 @@ export default function DocDashboard() {
                <p className="text-base font-bold">Appointment Requests</p>
                <p className="text-2xl font-bold">{patient.length}</p>
                <div className="space-y-2 mt-2">
-                 {patient.map((p) => (
-                   <div key={p.id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
+                 {doctors.filter((e) => e.name === id && e.requeststatus === "pending").map((p) => (
+                   <div key={p._id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
                      <div className='text-left'>
-                     <p className="text-lg font-bold">{p.name}</p>
+                     <p className="text-lg font-bold">{p.requestBy}</p>
                      <p className="text-sm font-medium">Date:{p.appointmentDate}</p>
-                     <p className="text-sm font-medium">Hours: ({p.time})</p>
+                     <p className="text-sm font-medium">Time: ({p.requestTime})</p>
+                     <p className={`text-sm font-medium ${p.requeststatus === "accepted" ? "text-green-600" : "text-yellow-600" }`}>Status: ({p.requeststatus})</p>
                  </div>
                      <div className="flex gap-3">
                        <button onClick={() => addpatient(p._id)} className='hover:bg-gray-300 rounded-xl p-2'>✔️</button>
@@ -203,12 +217,15 @@ export default function DocDashboard() {
  
              {/* Hired  patients */}
           <div className="flex flex-col gap-4 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
-   <p className="text-base font-bold">Today's appointmnets</p>
-   {patient.map((patient) => (
+   <p className="text-base font-bold">Appointmnets</p>
+   {doctors.filter((e) => e.name === id && e.requeststatus === "accepted").map((patient) => (
      <div key={patient._id} className="flex items-center justify-between bg-gray-100 p-2 rounded border-b pb-2 last:border-none">
        <div className='text-left'>
-       <p className="text-lg ">{patient.name}</p>
+       <p className="text-lg ">{patient.requestBy}</p>
        <p className="text-sm text-gray-500x font-medium">Fees:{patient.fees}</p>
+                     <p className="text-sm font-medium">Date:{patient.appointmentDate}</p>
+                     <p className="text-sm font-medium">Time: ({patient.requestTime})</p>
+                     <p className={`text-sm font-medium ${patient.requeststatus === "accepted" ? "text-green-600" : "text-yellow-600" }`}>Status: ({patient.requeststatus})</p>
        </div>
        <button onClick={() => removepatient(patient._id)} className='hover:bg-gray-300 rounded-xl p-2'> ❌ </button>
      </div>

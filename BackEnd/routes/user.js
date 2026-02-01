@@ -82,16 +82,23 @@ router.get('/doctors', protect, async (req, res) => {
     if (req.user.role !== 'admin') {
       return res.status(403).json({ error: "Access denied" });
     }
-
     const doctors = await User.find({ role: 'doctor' })
       .select('_id name role');
-
     res.json(doctors);
   } catch (err) {
     res.status(500).json({ error: "Server error" });
   }
 });
 
+// ---------------- to get all users data only role and name ----------------
+router.get('/allUsers', async (req, res) => {
+  try {
+    const usersData = await User.find().select('_id name role');
+    res.json(usersData);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 // ---------------- DELETE USER ----------------
 router.delete("/delete/:id",protect, async (req, res) => {

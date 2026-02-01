@@ -9,6 +9,7 @@ const PatientDashboard = () => {
     const navigate = useNavigate();
     const API = import.meta.env.VITE_API_URL;
     const [doctors, setdoctors] = useState([] );
+    const [users, setusers] = useState([] );
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [date, setDate] = useState('');
     const [time, setTime] = useState(''); 
@@ -19,13 +20,13 @@ const PatientDashboard = () => {
 
       const fetchDoctors = async () => {
         try {
-          const res = await axios.get(`${API}/doctorsData/allDoctorsData`,
-         );
+          const res = await axios.get(`${API}/doctorsData/allDoctorsData`,);
           setdoctors(res.data);
         } catch (err) {
           console.error(err);
         }
       };
+
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -83,7 +84,7 @@ const LogOut = () => {
               </div>
               <div className="flex flex-col gap-2">
 
-                  <Link to="/message">   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                  <Link to={`/message?id=${id}&role=patient`}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Message</p>
                   </div></Link>
 
@@ -91,7 +92,7 @@ const LogOut = () => {
                   <p className="text-[#0d141c] text-[17px] font-bold">Ai Doc</p>
                   </div></Link>
 
-                  <button onClick={()=>Logout()}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                  <button onClick={()=>LogOut()}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                   <p className="text-[#0d141c] text-[17px] font-bold">Log Out</p>
                   </div></button>
               </div>
@@ -104,8 +105,7 @@ const LogOut = () => {
           <div className="flex flex-wrap justify-between gap-3 p-4">
             <p className="text-[#0d141c] tracking-light text-2xl md:text-3xl font-bold leading-tight">Patient's Dashboard</p>
           </div>
-
-         
+       
           {/* doctors  Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4">
             {/* doctors */}
@@ -149,14 +149,11 @@ const LogOut = () => {
 </div>
 :null
 }
-
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-
-           
+            </div>           
 
             {/* Hired  doctors */}
          <div className="flex flex-col gap-4 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
@@ -183,27 +180,6 @@ const LogOut = () => {
  </div>
 
           
-
-
-
-          {/* doctor Health & Status */}
-          <h2 className="text-[#0d141c] text-lg md:text-2xl font-bold px-4 pb-3 pt-5">Doctor Info</h2>
-          <div className="p-6">
-           
-
-            <div className="flex flex-col gap-4 rounded-lg border border-[#cedbe8] p-6 bg-white shadow">
-              <p className="text-base font-medium">doctor Status</p>
-              {doctors.map((doctor) => (
-                <div key={doctor._id} className="flex items-center justify-between">
-                  <p className="font-medium">{doctor.name}</p>
-                  <div className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-full `}></span>
-                    <p>{doctor.status}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

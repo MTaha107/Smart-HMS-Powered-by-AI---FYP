@@ -2,7 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors'); 
 const connectDB = require('./database');
+const http = require("http");
+const { Server } = require("socket.io");
+const socketHandler = require("./socket");
+
 const app = express()
+const server = http.createServer(app);
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -17,6 +22,15 @@ app.use(cors({
     credentials: true
 }));
 
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+});
+socketHandler(io);
+
 app.use(express.json());
 
 connectDB();
@@ -26,9 +40,11 @@ const userRoutes = require('./routes/user');
 app.use('/users', userRoutes);
 const doctorsDataRoutes = require('./routes/doctorsData');
 app.use('/doctorsData', doctorsDataRoutes);
+const messagesRoutes = require('./routes/messages');
+app.use('/messages', messagesRoutes);
 
 app.get('/', (req, res) => res.send('HMS API Running'));
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
