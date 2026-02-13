@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 
 export default function ChatComponent({selecteddoctor}) {
 
+  const API = import.meta.env.VITE_API_URL;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
     const searchParams = useSearchParams();
@@ -34,7 +35,7 @@ export default function ChatComponent({selecteddoctor}) {
     const loadMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/messages/${id}/${selecteddoctor.name}`
+          `${API}/messages/${id}/${selecteddoctor.name}`
         );
         setMessages(res.data);
       } catch (err) {
@@ -70,7 +71,6 @@ export default function ChatComponent({selecteddoctor}) {
 <p className="text-sm text-gray-500">online</p>
 </div>
 </div>
-
 
 {/* Messages Section */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-cover">

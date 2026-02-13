@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo.png";
-
+import logo from "../assets/images/logo.png"
+import axios from 'axios';
 
 const AiDoc = () => {
 const navigate = useNavigate();
-const [faqs, setFaqs] = useState([]);
-const [isLoggedIn, setIsLoggedIn] = useState(false);
+const API = import.meta.env.VITE_API_URL; 
 const [menuOpen, setMenuOpen] = useState(false);
-const [question, setQuestion] = useState("");
-const [answer, setAnswer] = useState("");
-const [topics, setTopics] = useState([]);
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState([]);
 
   
 const handleLogout = () => {
-   
+   localStorage.removeItem("token");
+  navigate("/");
   };
 
-  const handleAsk = async () => {
-   
-  };
+   const sendMessage = async () => {
+    const res = await axios.post(`${API}/api/ai/chat`, {
+      message
+    });
+
+    setChat([...chat,
+      { role: "User", text: message },
+      { role: "Ai Doc", text: res.data.reply }
+    ]);
+
+    setMessage("");
+  };;
 
   return (
     <div
@@ -38,24 +46,20 @@ const handleLogout = () => {
         {/* Desktop Navbar */}
         <nav className="hidden sm:flex sm:flex-1 justify-end gap-8">
           <a href="/" className="text-black text-[16px] font-bold transition-colors">Home</a>
-          {isLoggedIn ? (
+          
             <button
   onClick={handleLogout}
-  className="flex items-center gap-2 text-green-700 font-bold transition-colors cursor-pointer"
+  className="flex items-center gap-2 text-black-700 font-bold transition-colors cursor-pointer"
 >
   <span className="hidden sm:inline cursor-pointer">Logout</span>
 </button>
-
-          ) : (
-            <a href="/login" className="text-black text-[16px] font-bold transition-colors">Login</a>
-          )}
         </nav>
 
        
         <div className="sm:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-green-700 focus:outline-none"
+            className="text-black-700 focus:outline-none"
           >
             {menuOpen ? "✖" : "☰"}
           </button>
@@ -66,18 +70,13 @@ const handleLogout = () => {
       {menuOpen && (
         <div className="sm:hidden flex flex-col bg-white border-b border-gray-200 px-4 py-3 space-y-2">
           <a href="/" className="text-black text-[16px] font-bold">Home</a>
-          {isLoggedIn ? (
+       
             <button
   onClick={handleLogout}
-  className="flex items-center gap-2 text-green-700 font-bold transition-colors"
->
-  <LogoutSvg className="w-6 h-6" />
-  <span className="hidden sm:inline">Logout</span>
+  className="text-black text-[16px] font-bold"
+>Logout
 </button>
 
-          ) : (
-            <a href="/login" className="text-black text-[16px] font-bold">Login</a>
-          )}
         </div>
       )}
 
@@ -92,36 +91,20 @@ const handleLogout = () => {
             <input
               type="text"
               className="flex-1 px-3 py-2 rounded border border-gray-300 focus:outline-none"
-              placeholder="Ask your question..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Describe your symptoms"
             />
-            <button onClick={handleAsk} className="px-4 py-2 bg-black text-white rounded">
+            <button onClick={sendMessage} className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
               Ask
             </button>
           </div>
-
-          {answer && (
-            <div className="p-3 bg-gray-100 rounded mb-4">
-              <p>{answer}</p>
-            </div>
-          )}
-
          
-          <h2 className="text-[#0d141c] text-xl sm:text-[22px] font-bold px-2 sm:px-4 pb-3 pt-5">
-            You can give him your Symptoms and this bot will suggest you medicence for that
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-2 sm:p-4">
-            
-          </div>
-
-       
-          <h2 className="text-[#0d141c] text-xl sm:text-[22px] font-bold px-2 sm:px-4 pb-3 pt-5">
-            You can also book appointments. 
-          </h2>
-          <div className="flex flex-col p-2 sm:p-4">
-            
-          </div>
+           <div className="flex flex-col text-left ">
+        {chat.map((c, i) => (
+          <p className="mt-3 mb-4 bg-gray-200 m-2 p-2 rounded" key={i}><b>{c.role}:</b> {c.text} </p>
+        ))}
+      </div>
         </div>
       </div>
     </div>

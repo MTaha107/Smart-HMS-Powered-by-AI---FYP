@@ -42,6 +42,8 @@ const doctorsDataRoutes = require('./routes/doctorsData');
 app.use('/doctorsData', doctorsDataRoutes);
 const messagesRoutes = require('./routes/messages');
 app.use('/messages', messagesRoutes);
+const aiChat = require('./routes/aiChat')
+app.use('/api/ai', aiChat);
 
 app.get('/', (req, res) => res.send('HMS API Running'));
 

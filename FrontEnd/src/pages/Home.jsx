@@ -8,7 +8,6 @@ import feature3 from "../assets/images/feature3.jpg";
 import introduction from "../assets/images/introduction.jpg";
 import testimonial from "../assets/images/testimonial.jpg";
 import benifits from "../assets/images/benifits.jpg";
-import hero1 from "../assets/images/hero1.png";
 
 const Home = () => {
    const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +50,7 @@ const Home = () => {
    
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="md:hidden text-2xl p-4 text-green-700 focus:outline-none"
+      className="md:hidden text-2xl p-4 text-black-700 focus:outline-none"
     >
       ☰
     </button>
@@ -60,8 +59,8 @@ const Home = () => {
  
   {isOpen && (
     <div className="md:hidden flex flex-col space-y-4 px-4 pb-4 bg-white shadow">
-      <Link to="/" className="block py-2 text-green-700">Home</Link>
-      <Link to="/aiDoc" className="block py-2 text-green-700">Ai Doc</Link>
+      <Link to="/" className="block py-2 text-black-700">Home</Link>
+      <Link to="/aiDoc" className="block py-2 text-black-700">Ai Doc</Link>
 
      
      
@@ -69,7 +68,7 @@ const Home = () => {
      
      <Link
   to="/login"
-  className="flex items-center justify-center bg-green-700 px-4 py-2 rounded text-white hover:bg-green-800"
+  className="flex items-center justify-center bg-gray-700 px-4 py-2 rounded text-white hover:bg-gray-800"
 >
   <p>Login</p>
   <svg xmlns="http://www.w3.org/2000/svg" 
@@ -86,15 +85,28 @@ const Home = () => {
   )}
 </header>
 
-    <div className="containerhero">
-      <img src={hero1} alt="farming pics" className='w-auto rounded-lg responsiveimg'/>
-      <div className="centeredhero mt-10 md:mt-0">
-        <p className='text-xl font-[1000] text-white '>WELCOME TO </p>
-        <h1 className='text-6xl m-6 font-[1000]'>Medi Care</h1>
-        <p className='text-lg text-gray-200 font-[1000]'>Your personal AI healthcare assistant — book doctor appointments, get smart medicine suggestions, and chat with certified doctors instantly.</p>
-        <button className='bg-gray-900  text-white p-3 m-5 rounded-lg'>Discover More</button>
-      </div>
-    </div>
+    <div className="containerhero bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 min-h-screen flex items-center justify-center text-center px-6">
+  
+  <div className="mt-10 md:mt-0 max-w-3xl">
+    <p className="text-xl font-bold text-blue-200 tracking-widest">
+      WELCOME TO
+    </p>
+
+    <h1 className="text-6xl md:text-7xl m-6 font-extrabold text-white">
+      Medi Care
+    </h1>
+
+    <p className="text-lg text-gray-200 font-medium">
+      Your personal AI healthcare assistant — book doctor appointments, 
+      get smart medicine suggestions, and chat with certified doctors instantly.
+    </p>
+
+    <button className="bg-white text-blue-900 font-semibold px-6 py-3 mt-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
+      Discover More
+    </button>
+  </div>
+
+</div>
 
 
     <section
@@ -359,11 +371,11 @@ We blend artificial intelligence and healthcare expertise to deliver a seamless 
             <h3 className="font-bold mb-2">News</h3>
             <div className="w-12 h-1 bg-orange-400 mb-4"></div>
             <div className="mb-6">
-              <p>Bringing food production back to cities</p>
+              <p>Bringing easiness in your life with AI-powered healthcare</p>
               <p className="text-gray-400 text-sm">July 5 2022</p>
             </div>
             <div>
-              <p>Another headline here</p>
+              <p>Help you get appointments and medical advice quickly</p>
               <p className="text-gray-400 text-sm">August 12 2022</p>
             </div>
           </div>
@@ -371,13 +383,13 @@ We blend artificial intelligence and healthcare expertise to deliver a seamless 
             <h3 className="font-bold mb-2">Contact</h3>
             <div className="w-12 h-1 bg-orange-400 mb-4"></div>
             <p className="flex items-center space-x-2">
-              <span>📞</span> <span>02020202</span>
+              <span>📞</span> <span>+92 325 7990056</span>
             </p>
             <p className="flex items-center space-x-2">
-              <span>✉️</span> <span>swen221101043@kfuiet.edu.pk</span>
+              <span>✉️</span> <span>tahawaraich1@gmail.com</span>
             </p>
             <p className="flex items-center space-x-2">
-              <span>📍</span> <span>RYK</span>
+              <span>📍</span> <span>Rahim Yar Khan,Pakistan</span>
             </p>
             <div className="mt-4 flex flex-col sm:flex-row">
               <input

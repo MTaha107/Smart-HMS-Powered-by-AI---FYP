@@ -194,7 +194,7 @@ export default function DocDashboard() {
              {/* patients */}
              <div className="flex flex-col gap-2 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
                <p className="text-base font-bold">Appointment Requests</p>
-               <p className="text-2xl font-bold">{patient.length}</p>
+               <p className="text-2xl font-bold">{patient.filter((e) => e.name === id && e.requeststatus === "pending").length}</p>
                <div className="space-y-2 mt-2">
                  {doctors.filter((e) => e.name === id && e.requeststatus === "pending").map((p) => (
                    <div key={p._id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
