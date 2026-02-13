@@ -2,6 +2,7 @@ const express = require('express');
 const DoctorsData = require('../models/DoctorsData');
 const router = express.Router();
 const Message = require('../models/Message');
+const protect = require('../middleware/authmiddleware');
 
 // ---------------- test route ----------------
 router.get('/', (req, res) => {
@@ -9,7 +10,7 @@ router.get('/', (req, res) => {
 });
 
 // ---------------- to get all doctors in messages ----------------
-router.get('/allDoctorsData' , async (req, res) => {
+router.get('/allDoctorsData' , protect, async (req, res) => {
   try {
     const doctors = await DoctorsData.find()
     res.json(doctors);
@@ -19,7 +20,7 @@ router.get('/allDoctorsData' , async (req, res) => {
 });
 
 // ---------------- to send a message ----------------
-router.post("/sendMessage", async (req, res) => {
+router.post("/sendMessage", protect, async (req, res) => {
   try {
     const { userid, senderid, receiverid, messageText } = req.body;
 
@@ -41,7 +42,7 @@ router.post("/sendMessage", async (req, res) => {
 });
 
 // ---------------- to get messages history between two users ----------------
-router.get("/:senderid/:receiverid", async (req, res) => {
+router.get("/:senderid/:receiverid", protect, async (req, res) => {
   try {
     const { senderid, receiverid } = req.params;
     const messages = await Message.find({

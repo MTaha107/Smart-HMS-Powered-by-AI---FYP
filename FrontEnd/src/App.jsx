@@ -8,6 +8,7 @@ import PatientDashboard from './pages/PatientDashboard';
 import AiDoc from './pages/AiDoc';
 import Message from './pages/Message';
 import DocDashboard from './pages/DocDashboard';
+import Protectedroute from './components/ProtectedRoute';
 
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/patientDashboard" element={<PatientDashboard />} />
         <Route path="/aiDoc" element={<AiDoc />} />
-        <Route path="/message" element={<Message />} />
+        <Route path="/message" element={<Protectedroute><Message /></Protectedroute>} />
         <Route path="/docDashboard" element={<DocDashboard />} />
       </Routes>
      </Router>

@@ -96,9 +96,9 @@ export default function DocDashboard() {
              <div className="flex flex-col gap-4 ">
             
                <div className="flex  justify-center items-center gap-3 mb-6 mt-4">
-                <div className="flex flex-col items-center space-x-2">
-                      <img src={drpfp} alt="Logo" className="w-20 h-20 rounded-full mb-3" />
-                      <p className='text-black font-bold'>{id}</p>
+                <div className="">
+                     <p className='bg-black rounded-full mb-2 w-15 h-15 flex items-center justify-center text-white text-xl'>{id.charAt(0)}</p>
+                     <p className='text-black font-bold'>{id}</p>
                     </div>
                </div>
                
