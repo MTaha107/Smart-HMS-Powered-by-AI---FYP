@@ -2,6 +2,7 @@ import { createSessionStorage, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import ChatComponent from "../components/ChatComponent";
 
 export default function Message() {
@@ -9,16 +10,21 @@ export default function Message() {
     const navigate = useNavigate();
     const API = import.meta.env.VITE_API_URL;
     const searchParams = useSearchParams();
-    const id = searchParams[0].get("id");
+    const location = useLocation();
+    const id = location.state?.id;
     const role = searchParams[0].get("role");
     const [doctors, setdoctors] = useState([]);
     const [users, setusers] = useState([]);
     const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const token = localStorage.getItem("token");
 
      const fetchDoctors = async () => {
         try {
-          const res = await axios.get(`${API}/messages/allDoctorsData`,
-         );
+          const res = await axios.get(`${API}/messages/allDoctorsData`,{
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
           setdoctors(res.data);
         } catch (err) {
           console.error(err);

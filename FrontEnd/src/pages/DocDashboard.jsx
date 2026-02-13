@@ -104,7 +104,7 @@ export default function DocDashboard() {
                
                <div className="flex flex-col gap-2">
  
-                   <Link to={`/message?id=${id}&role=doctor`}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
+                   <Link to={`/message?role=doctor`} state={{ id: id }}>   <div className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg">
                    <p className="text-[#0d141c] text-[17px] font-bold">Message</p>
                    </div></Link>
 
@@ -168,7 +168,7 @@ export default function DocDashboard() {
    <p className="text-base font-bold">Your Info</p>
    <hr />
   {doctors.filter((e) => e.name === id && e.requeststatus === "none").map((e)=>{
-    return (<div className='bg-gray-200  p-2 rounded-l flex justify-between'>
+    return (<div key={e._id} className='bg-gray-200  p-2 rounded-l flex justify-between'>
     <div className='flex flex-col items-start gap-2'>
     <p className='text-l font-bold'>Starting Hour:{e.startingHour}</p>
     <p className='text-l font-bold'>Ending Hour:{e.endingHour}</p>

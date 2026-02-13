@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { socket } from "../socket";
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 export default function ChatComponent({selecteddoctor}) {
 
   const API = import.meta.env.VITE_API_URL;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-    const searchParams = useSearchParams();
-    const id = searchParams[0].get("id");
+    const location = useLocation();
+    const id = location.state?.id;
+    const token = localStorage.getItem("token");
 
     // ---------------- connect socket ----------------
   useEffect(() => {
@@ -34,9 +35,11 @@ export default function ChatComponent({selecteddoctor}) {
   useEffect(() => {
     const loadMessages = async () => {
       try {
-        const res = await axios.get(
-          `${API}/messages/${id}/${selecteddoctor.name}`
-        );
+        const res = await axios.get(`${API}/messages/${id}/${selecteddoctor.name}`,{
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
         setMessages(res.data);
       } catch (err) {
         console.error(err);
