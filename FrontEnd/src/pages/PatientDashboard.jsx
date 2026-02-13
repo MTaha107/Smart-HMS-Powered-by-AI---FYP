@@ -2,20 +2,19 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import logo from "../assets/images/logo.png";
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 const PatientDashboard = () => {
   
     const navigate = useNavigate();
     const API = import.meta.env.VITE_API_URL;
     const [doctors, setdoctors] = useState([] );
-    const [users, setusers] = useState([] );
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [date, setDate] = useState('');
     const [time, setTime] = useState(''); 
     const [popUp, setPopUp] = useState(false);
-    const searchParams = useSearchParams();
-    const id = searchParams[0].get("id");
+    const location = useLocation();
+    const id = location.state?.name;
     const [requeststatus, setRequeststatus] = useState("pending");
 
       const fetchDoctors = async () => {
@@ -177,9 +176,7 @@ const LogOut = () => {
   ))}
 
 </div>
- </div>
-
-          
+ </div>          
         </div>
       </div>
     </div>

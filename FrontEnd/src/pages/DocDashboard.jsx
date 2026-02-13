@@ -1,10 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Link,} from 'react-router-dom';
-import drpfp from "../assets/images/drpfp.jpeg";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 
 export default function DocDashboard() {
@@ -20,8 +19,8 @@ export default function DocDashboard() {
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
   const [role, setRole] = useState("doctor");
-  const searchParams = useSearchParams();
-  const id = searchParams[0].get("id");
+    const location = useLocation();
+    const id = location.state?.name;
    
 
   const fetchDoctors = async () => {

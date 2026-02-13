@@ -39,9 +39,9 @@ const Login = () => {
           if (role === 'admin') {
             navigate('/adminDashboard');
           }  else if (role === 'patient') {
-            navigate(`/patientDashboard?id=${name}`);
+            navigate(`/patientDashboard`, { state: { name }});
           }else if (role === 'doctor') {
-            navigate(`/docDashboard?id=${name}`);
+            navigate(`/docDashboard`,  { state: { name }});
           } else {
             setError('Unknown user role');
           }
