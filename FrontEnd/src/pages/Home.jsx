@@ -14,7 +14,7 @@ const Home = () => {
   
   return (
     
-  <div className="bg-gray-200  max-w-auto overflow-x-hidden font-roboto mx-5">
+  <div className="bg-gray-200  max-w-auto overflow-x-hidden font-roboto ">
    
   <header className=" bg-gray-200 backdrop-blur-md shadow-md fixed top-0 left-0 w-full z-50">
   <div className=" max-w-7xl  flex justify-between items-center py-4 px-3 md:px-8">
@@ -336,8 +336,7 @@ We blend artificial intelligence and healthcare expertise to deliver a seamless 
         >
           <div>
             <p className="mb-4">
-              Your company’s short description goes here. It can be two lines
-              long to explain your mission.
+              Our mission is to make healthcare simple, fast, and accessible for everyone.
             </p>
             <div className="flex space-x-4 text-yellow-400 text-xl">
               <a href="#"><i className="fab fa-instagram"></i></a>

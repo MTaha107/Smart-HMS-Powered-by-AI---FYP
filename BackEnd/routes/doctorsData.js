@@ -9,13 +9,13 @@ router.get('/', (req, res) => {
 // ---------------- REGISTER ----------------
 router.post('/register', async (req, res) => {
     try {
-        const { userName, startingHour, endingHour, role, fees, requestTime, appointmentDate, requeststatus, requestBy } = req.body;
+        const { userName, desc, startingHour, endingHour, role, fees, requestTime, appointmentDate, requeststatus, requestBy } = req.body;
 
-        if (!userName || !startingHour || !endingHour || !fees) {
-            return res.status(400).json({ error: 'Username, starting hour, ending hour, and fees are required' });
+        if (!userName || !desc || !startingHour || !endingHour || !fees) {
+            return res.status(400).json({ error: 'Username, description, starting hour, ending hour, and fees are required' });
         }
 
-        const user = new DoctorsData({name: userName, startingHour: startingHour, endingHour: endingHour, role: role, fees: fees, requestTime: requestTime, appointmentDate: appointmentDate, requeststatus: requeststatus, requestBy: requestBy });
+        const user = new DoctorsData({name: userName, desc: desc, startingHour: startingHour, endingHour: endingHour, role: role, fees: fees, requestTime: requestTime, appointmentDate: appointmentDate, requeststatus: requeststatus, requestBy: requestBy });
         await user.save();
 
         res.json({ message: 'Doctor\'s time registered successfully' });
@@ -35,7 +35,7 @@ router.get('/doctorsPersonalData' , async (req, res) => {
     }
 
     const doctors = await DoctorsData.find({ name: name })
-      .select('_id name startingHour endingHour role fees requeststatus requestBy appointmentDate requestTime');
+      .select('_id name desc startingHour endingHour role fees requeststatus requestBy appointmentDate requestTime');
     res.json(doctors);
   } catch (err) {
     res.status(500).json({ error: "Server error" });

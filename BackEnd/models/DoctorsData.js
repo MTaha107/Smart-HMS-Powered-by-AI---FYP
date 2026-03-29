@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   userid: String,
   name: { type: String, required: true },
+  desc: String,
   startingHour: String,
   endingHour: String,
   fees: Number,

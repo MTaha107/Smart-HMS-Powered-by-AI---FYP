@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import { Link,} from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
@@ -61,7 +62,7 @@ const Login = () => {
             <div className="flex items-center gap-2 sm:gap-4 text-[#0d141c] ">
               <div className="flex items-center space-x-2">
                     <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
-                    <p className='text-black font-bold'>MediCare</p>
+                  <Link to="/">  <p className='text-black font-bold'>MediCare</p></Link>
                   </div>
             </div>
           </header>

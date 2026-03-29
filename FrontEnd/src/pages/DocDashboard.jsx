@@ -15,6 +15,7 @@ export default function DocDashboard() {
   const [doctors, setDoctors] = useState([]);
   const [staringHour, setStartingHour] = useState("");
   const [endingHour, setEndingHour] = useState("");
+  const [desc, setDesc] = useState("");
   const [fees, setFees] = useState(0);
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
@@ -42,6 +43,7 @@ export default function DocDashboard() {
    try {
         const res = await axios.post(`${API}/doctorsData/register`, {
           userName: id,
+          desc: desc,
           startingHour: staringHour,
           endingHour: endingHour,
           role: role, 
@@ -131,6 +133,16 @@ export default function DocDashboard() {
                <hr />
 
                <div className="space-y-2 mt-2 flex flex-col align-center justify-center">
+                <label htmlFor="desc">Enter Your Speciality / Description</label>
+                <input 
+                id='desc'
+                value={desc}
+                type="text" 
+                placeholder='Eye specilist?'
+                className='bg-gray-200 rounded-l p-2'
+                onChange={(e)=> {setDesc(e.target.value)}}  />
+                <hr />
+
                 <label htmlFor="startingHour">Enter Starting Hour</label>
                 <input 
                 id='startingHour'
@@ -169,6 +181,7 @@ export default function DocDashboard() {
   {doctors.filter((e) => e.name === id && e.requeststatus === "none").map((e)=>{
     return (<div key={e._id} className='bg-gray-200  p-2 rounded-l flex justify-between'>
     <div className='flex flex-col items-start gap-2'>
+    <p className='text-l font-bold'>Description:{e.desc}</p>
     <p className='text-l font-bold'>Starting Hour:{e.startingHour}</p>
     <p className='text-l font-bold'>Ending Hour:{e.endingHour}</p>
     <p className='text-l font-bold'>Fees:{e.fees}Rs</p>
@@ -193,7 +206,7 @@ export default function DocDashboard() {
              {/* patients */}
              <div className="flex flex-col gap-2 rounded-lg p-4 border border-[#cedbe8] bg-white shadow h-[300px] overflow-y-auto overflow-x-hidden">
                <p className="text-base font-bold">Appointment Requests</p>
-               <p className="text-2xl font-bold">{patient.filter((e) => e.name === id && e.requeststatus === "pending").length}</p>
+               <p className="text-2xl font-bold">{doctors.filter((e) => e.name === id && e.requeststatus === "pending").length }</p>
                <div className="space-y-2 mt-2">
                  {doctors.filter((e) => e.name === id && e.requeststatus === "pending").map((p) => (
                    <div key={p._id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
