@@ -11,7 +11,6 @@ const PatientDashboard = () => {
     const [doctors, setdoctors] = useState([] );
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [date, setDate] = useState('');
-    const [time, setTime] = useState(''); 
     const [popUp, setPopUp] = useState(false);
     const location = useLocation();
     const id = location.state?.name;
@@ -30,26 +29,57 @@ const PatientDashboard = () => {
     fetchDoctors();
   }, []);
 
+// Helper function to generate 15-minute time slots
+const generateTimeSlots = (start, end) => {
+  const slots = [];
+  const parseTime = (timeStr) => {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const formatTime = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    const meridiem = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+    return `${displayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')} ${meridiem}`;
+  };
+
+  const startMinutes = parseTime(start);
+  const endMinutes = parseTime(end);
+
+  for (let time = startMinutes; time < endMinutes; time += 15) {
+    slots.push(formatTime(time));
+  }
+
+  return slots;
+};
+
 const adddoctor = async(id) => {
   setSelectedDoctor(id);
   setPopUp(true);
 };
 
-const bookappointment = async() => {
+const bookappointment = async(slotTime) => {
+  if (!date) {
+    alert("Please select a date first!");
+    return;
+  }
    try {
           const res = await axios.post(`${API}/doctorsData/register`, {
             userName: selectedDoctor.name,
+            desc: selectedDoctor.desc,
             startingHour: selectedDoctor.startingHour,
             endingHour: selectedDoctor.endingHour,
             role: selectedDoctor.role, 
             fees: selectedDoctor.fees,
-            requestTime: time,
+            requestTime: slotTime,
             appointmentDate: date,
             requeststatus: requeststatus,
             requestBy: id,
           }); 
          } catch (err) {
-          console.error("Signup error:", err.response?.data || err.message);
+          console.error("Appointment error:", err.response?.data || err.message);
         } 
         fetchDoctors(); 
   setPopUp(false);
@@ -116,6 +146,7 @@ const LogOut = () => {
                   <div key={doctor._id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
                     <div className='text-left'>
                     <p className="text-lg font-bold">Name:{doctor.name}</p>
+                    <p className="text-lg font-bold">Description:{doctor.desc}</p>
                     <p className="text-sm font-medium">Fees:{doctor.fees}</p>
                     <p className="text-sm font-medium">Hours: ({doctor.startingHour} to {doctor.endingHour})</p>
                 </div>
@@ -126,27 +157,33 @@ const LogOut = () => {
 {
   popUp?
   <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-40">
-{/* Box For Date and time */}
-    <div className="flex flex-col gap-4 fixed bg-gray-500 rounded-lg p-4 shadow-lg w-80 h-60">
-      <button className="text-green-600 hover:text-green-800 cursor-pointer" onClick={()=> setPopUp(false)}>❌</button>
+    {/* Box For Date and time slots */}
+    <div className="flex flex-col gap-4 fixed bg-gray-500 rounded-lg p-4 shadow-lg w-80 max-h-[80vh] overflow-y-auto">
+      <button className="text-green-600 hover:text-green-800 cursor-pointer text-xl" onClick={()=> setPopUp(false)}>❌</button>
+      
+      <label className="text-white font-semibold">Select Date:</label>
       <input
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        className="border p-2 rounded text-white"
+        className="border p-2 rounded text-gray-800"
       />
 
-      <input
-        type="time"
-        value={time}
-        onChange={(e) => setTime(e.target.value)}
-        className="border p-2 rounded text-white"
-      />
-
-     <button className="text-white bg-black rounded-lg p-2 hover:text-gray-800 cursor-pointer" onClick={()=> bookappointment()}> OK </button>
+      <label className="text-white font-semibold mt-2">Select Time Slot:</label>
+      <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto pr-2">
+        {selectedDoctor && generateTimeSlots(selectedDoctor.startingHour, selectedDoctor.endingHour).map((slot, index) => (
+          <button
+            key={index}
+            onClick={() => bookappointment(slot)}
+            className="bg-white text-gray-800 py-2 px-2 rounded hover:bg-green-400 hover:text-white transition duration-200 font-medium text-sm"
+          >
+            {slot}
+          </button>
+        ))}
+      </div>
     </div>
-</div>
-:null
+  </div>
+  :null
 }
                     </div>
                   </div>
