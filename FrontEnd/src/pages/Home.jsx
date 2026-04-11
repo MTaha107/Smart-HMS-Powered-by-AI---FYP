@@ -101,9 +101,11 @@ const Home = () => {
       get smart medicine suggestions, and chat with certified doctors instantly.
     </p>
 
+<a href="#Discover" >
     <button className="bg-white text-blue-900 font-semibold px-6 py-3 mt-6 rounded-xl shadow-lg hover:scale-105 transition duration-300">
       Discover More
     </button>
+    </a>
   </div>
 
 </div>
@@ -184,6 +186,7 @@ By combining AI technology with real doctors, we ensure faster, smarter, and mor
         <div className="mt-6 flex flex-col sm:flex-row items-center gap-5">
         </div>
         <a
+        id='Discover'
           href="#"
           className="mt-6 inline-block bg-black px-6 py-3 rounded text-white font-medium"
           >Learn More</a
@@ -267,7 +270,7 @@ We blend artificial intelligence and healthcare expertise to deliver a seamless 
 </ul>
 
           <a
-            href="#"
+            href="#Discover"
             className="mt-6 inline-block bg-black px-6 py-3 rounded text-white font-medium"
             >Discover More</a
           >

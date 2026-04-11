@@ -5,7 +5,9 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-
+html {
+  scroll-behavior: smooth;
+}
 .containerhero {
   position: relative;
   text-align: center;

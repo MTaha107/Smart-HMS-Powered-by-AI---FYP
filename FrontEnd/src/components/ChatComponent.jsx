@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { socket } from "../socket";
 import { useLocation } from "react-router-dom";
@@ -8,9 +8,21 @@ export default function ChatComponent({selecteddoctor}) {
   const API = import.meta.env.VITE_API_URL;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-    const location = useLocation();
-    const id = location.state?.id;
-    const token = localStorage.getItem("token");
+  const messagesBottomRef = useRef(null);
+  const location = useLocation();
+  const id = location.state?.id;
+  const token = localStorage.getItem("token");
+
+  // Format timestamp to HH:MM AM/PM
+  const formatTime = (timestamp) => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
     // ---------------- connect socket ----------------
   useEffect(() => {
@@ -48,6 +60,11 @@ export default function ChatComponent({selecteddoctor}) {
 
     loadMessages();
   }, [id, selecteddoctor.name]);
+  
+  // ---------------- auto-scroll to bottom ----------------
+  useEffect(() => {
+    messagesBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   
    // ---------------- send message ----------------
   const sendMessage = () => {
@@ -87,16 +104,20 @@ export default function ChatComponent({selecteddoctor}) {
             }`}
           >
             <div
-              className={`max-w-xs p-3 rounded-xl shadow text-gray-800 ${
+              className={`max-w-xs p-3 rounded-xl shadow ${
                 msg.senderid === id
                   ? "bg-gray-200"
                   : "bg-white"
               }`}
             >
-              {msg.messageText}
+              <p className="text-gray-800 text-left">{msg.messageText}</p>
+              <p className="text-xs text-gray-500 mt-1 text-right">
+                {formatTime(msg.createdAt || msg.timestamp)}
+              </p>
             </div>
           </div>
         ))}
+        <div ref={messagesBottomRef} />
       </div>
 
 
