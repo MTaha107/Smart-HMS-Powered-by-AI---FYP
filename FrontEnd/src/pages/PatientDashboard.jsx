@@ -211,11 +211,51 @@ const LogOut = () => {
       </button>
     </div>
   ))}
-
 </div>
- </div>          
+
+ </div>     
+ 
+       <div className="m-4 rounded-lg border border-[#cedbe8] bg-white shadow h-[50px] overflow-hidden relative flex items-center">
+  {/* The "Track" that holds the content */}
+  <div className="flex absolute whitespace-nowrap animate-marquee">
+    
+    {/* Section 1 */}
+    <div className="flex items-center">
+      <p className="px-4 text-gray-700">
+        Experience 24/7 virtual care — Input your symptoms and let our AI provide immediate analysis.
+      </p>
+      <span className="text-blue-400 font-bold">•</span>
+      <p className="px-4 text-gray-700">
+        Your AI Doctor is ready — Get instant medical insights and guidance 24/7.
+      </p>
+      <span className="text-blue-400 font-bold">•</span>
+      <p className="px-4 text-gray-700">
+        Fast and secure virtual support — Describe how you feel to get started.
+      </p>
+      <span className="text-blue-400 font-bold mx-4">•</span>
+    </div>
+
+    {/* Section 2 (Identical copy for seamless looping) */}
+    <div className="flex items-center">
+      <p className="px-4 text-gray-700">
+        Experience 24/7 virtual care — Input your symptoms and let our AI provide immediate analysis.
+      </p>
+      <span className="text-blue-400 font-bold">•</span>
+      <p className="px-4 text-gray-700">
+        Your AI Doctor is ready — Get instant medical insights and guidance 24/7.
+      </p>
+      <span className="text-blue-400 font-bold">•</span>
+      <p className="px-4 text-gray-700">
+        Fast and secure virtual support — Describe how you feel to get started.
+      </p>
+      <span className="text-blue-400 font-bold mx-4">•</span>
+    </div>
+    
+  </div>
+</div>     
         </div>
       </div>
+      
     </div>
   );
   
