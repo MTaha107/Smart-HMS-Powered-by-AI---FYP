@@ -12,22 +12,29 @@ const [menuOpen, setMenuOpen] = useState(false);
 
   
 const handleLogout = () => {
-   localStorage.removeItem("token");
-  navigate("/");
+  navigate(-1);
   };
 
-   const sendMessage = async () => {
+  const sendMessage = async () => {
+  try {
     const res = await axios.post(`${API}/api/ai/chat`, {
       message
     });
 
-    setChat([...chat,
+    setChat([
+      ...chat,
       { role: "User", text: message },
       { role: "Ai Doc", text: res.data.reply }
     ]);
 
     setMessage("");
-  };;
+    
+  } catch (error) {
+    // This runs if the request fails
+    // console.error("Chat Error:", error);
+    alert("Oops! Something went wrong. Please check your connection or try again later.");
+  }
+};
 
   return (
     <div
@@ -45,13 +52,12 @@ const handleLogout = () => {
 
         {/* Desktop Navbar */}
         <nav className="hidden sm:flex sm:flex-1 justify-end gap-8">
-          <a href="/" className="text-black text-[16px] font-bold transition-colors">Home</a>
-          
+         
             <button
   onClick={handleLogout}
-  className="flex items-center gap-2 text-black-700 font-bold transition-colors cursor-pointer"
+  className="flex items-center gap-2 text-black-700 font-bold transition-colors cursor-pointer hover:text-gray-500 "
 >
-  <span className="hidden sm:inline cursor-pointer">Logout</span>
+  <span className="hidden sm:inline cursor-pointer">Back</span>
 </button>
         </nav>
 
@@ -74,7 +80,7 @@ const handleLogout = () => {
             <button
   onClick={handleLogout}
   className="text-black text-[16px] font-bold"
->Logout
+>Back
 </button>
 
         </div>
