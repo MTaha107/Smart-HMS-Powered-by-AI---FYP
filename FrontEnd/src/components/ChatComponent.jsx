@@ -3,7 +3,7 @@ import axios from "axios";
 import { socket } from "../socket";
 import { useLocation } from "react-router-dom";
 
-export default function ChatComponent({selecteddoctor}) {
+export default function ChatComponent({selecteddoctor, onMessagesRead}) {
 
   const API = import.meta.env.VITE_API_URL;
   const [message, setMessage] = useState("");
@@ -24,6 +24,55 @@ export default function ChatComponent({selecteddoctor}) {
     });
   };
 
+  // Mark messages as read
+  const markMessagesAsRead = async (messageIds) => {
+    try {
+      for (const msgId of messageIds) {
+        await axios.put(`${API}/messages/markRead/${msgId}`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (err) {
+      console.error("Error marking messages as read:", err);
+    }
+  };
+
+  // Mark all messages from other user as read
+  const markAllAsRead = async () => {
+    try {
+      const response = await axios.put(`${API}/messages/markAllRead/${id}/${selecteddoctor.name}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      // Update local state to show messages as read
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.senderid === selecteddoctor.name && msg.receiverid === id && !msg.isRead
+            ? { ...msg, isRead: true, readAt: new Date().toISOString() }
+            : msg
+        )
+      );
+
+      // Notify parent component that messages have been read
+      if (onMessagesRead) {
+        onMessagesRead(selecteddoctor.name);
+      }
+
+      // Emit socket event to notify other users
+      socket.emit("messagesMarkedAsRead", {
+        userName: selecteddoctor.name,
+        userId: id
+      });
+      
+    } catch (err) {
+      console.error("Error marking all as read:", err);
+    }
+  };
+
     // ---------------- connect socket ----------------
   useEffect(() => {
     socket.connect();
@@ -38,11 +87,24 @@ export default function ChatComponent({selecteddoctor}) {
       });
     });
 
+    // Listen for read status updates
+    socket.on("messageRead", (data) => {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg._id === data.messageId
+            ? { ...msg, isRead: true, readAt: data.readAt }
+            : msg
+        )
+      );
+    });
+
     return () => {
       socket.off("receiveMessage");
+      socket.off("messageRead");
       socket.disconnect();
     };
   }, [id]);
+
  // ---------------- load chat history ----------------
   useEffect(() => {
     const loadMessages = async () => {
@@ -53,12 +115,22 @@ export default function ChatComponent({selecteddoctor}) {
   },
 });
         setMessages(res.data);
+        
+        // Mark unread messages from other user as read
+        const unreadMessages = res.data.filter(
+          msg => msg.receiverid === id && msg.senderid === selecteddoctor.name && !msg.isRead
+        );
+        if (unreadMessages.length > 0) {
+          await markAllAsRead();
+        }
       } catch (err) {
         console.error(err);
       }
     };
 
-    loadMessages();
+    if (selecteddoctor && id) {
+      loadMessages();
+    }
   }, [id, selecteddoctor.name]);
   
   // ---------------- auto-scroll to bottom ----------------
@@ -80,6 +152,20 @@ export default function ChatComponent({selecteddoctor}) {
     setMessage("");
   };
 
+  // Get read status indicator
+  const getReadIndicator = (msg) => {
+    if (msg.senderid !== id) return null; // Only show for sent messages
+    
+    return (
+      <span className="ml-1">
+        {msg.isRead ? (
+          <span className="text-blue-500 font-bold">✓✓</span>
+        ) : (
+          <span className="text-gray-400">✓</span>
+        )}
+      </span>
+    );
+  };
 
   return (
       <div className="flex-1 flex flex-col">
@@ -111,9 +197,12 @@ export default function ChatComponent({selecteddoctor}) {
               }`}
             >
               <p className="text-gray-800 text-left">{msg.messageText}</p>
-              <p className="text-xs text-gray-500 mt-1 text-right">
-                {formatTime(msg.createdAt || msg.timestamp)}
-              </p>
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-xs text-gray-500">
+                  {formatTime(msg.createdAt || msg.timestamp)}
+                </p>
+                {getReadIndicator(msg)}
+              </div>
             </div>
           </div>
         ))}

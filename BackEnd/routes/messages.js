@@ -19,6 +19,52 @@ router.get('/allDoctorsData' , protect, async (req, res) => {
   }
 });
 
+// ---------------- get unread count for a user ----------------
+router.get("/unread/:userid", protect, async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const unreadCount = await Message.countDocuments({
+      receiverid: userid,
+      isRead: false
+    });
+    res.json({ unreadCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ---------------- mark message as read ----------------
+router.put("/markRead/:messageId", protect, async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const message = await Message.findByIdAndUpdate(
+      messageId,
+      { isRead: true, readAt: new Date() },
+      { new: true }
+    );
+    res.json(message);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ---------------- mark all messages as read for a conversation ----------------
+router.put("/markAllRead/:senderid/:receiverid", protect, async (req, res) => {
+  try {
+    const { senderid, receiverid } = req.params;
+    await Message.updateMany(
+      { senderid: receiverid, receiverid: senderid, isRead: false },
+      { isRead: true, readAt: new Date() }
+    );
+    res.json({ message: "All messages marked as read" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // ---------------- to send a message ----------------
 router.post("/sendMessage", protect, async (req, res) => {
   try {
@@ -57,7 +103,5 @@ router.get("/:senderid/:receiverid", protect, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 module.exports = router;

@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     receiverid: { type: String, required: true },
     messageText: { type: String, required: true },
     role: { type: String },
-    status: {type: String},
+    isRead: { type: Boolean, default: false },
+    readAt: { type: Date, default: null },
     timestamp: { type: Date, default: Date.now }
 });
 
