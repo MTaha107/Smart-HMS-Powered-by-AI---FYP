@@ -411,7 +411,7 @@ We blend artificial intelligence and healthcare expertise to deliver a seamless 
       <div
         className="bg-gray-950 flex flex-col sm:flex-row justify-between text-white text-sm py-5 px-4 sm:px-20"
       >
-        <p>© All Copyright 2025 by m_taha_wrch</p>
+        <p>© All Copyright 2025 by Muhammad Taha Waraich</p>
         <p>Terms of Use Privacy Policy</p>
       </div>
     </section>

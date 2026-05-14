@@ -10,6 +10,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -46,7 +47,9 @@ const SignUp = () => {
       setLoading(false);
     }
   }
-
+const handleLogout = () => {
+  navigate(-1);
+  };
   return (
      <div
       className="relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden"
@@ -54,15 +57,36 @@ const SignUp = () => {
     >
       <div className="layout-container flex h-full grow flex-col">
        
-        <header className="flex items-center border-b border-solid border-b-[#e7edf4] bg-white px-4 sm:px-6 lg:px-10 py-3">
-          <div className="flex items-center gap-2 sm:gap-4 text-[#0d141c] ">
-           <div className="flex items-center space-x-2">
-                 <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
-                 <p className='text-black font-bold'>MediCare</p>
+         {/* Header */}
+             <header className="flex items-center justify-between border-b border-solid border-b-[#e7edf4] px-4 sm:px-6 lg:px-10 py-3">
+               <div className="flex items-center gap-2 sm:gap-4 text-[#0d141c] ">
+                 <div className="flex items-center space-x-2">
+                       <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
+                       <p className='text-black font-bold'>Medi Care</p>
+                     </div>
                </div>
-           
-          </div>
-        </header>
+       
+               {/* Desktop Navbar */}
+               <nav className="hidden sm:flex sm:flex-1 justify-end gap-8">
+                
+                   <button
+         onClick={handleLogout}
+         className="flex items-center gap-2 text-black-700 font-bold transition-colors cursor-pointer hover:text-gray-500 "
+       >
+         <span className="hidden sm:inline cursor-pointer">Back</span>
+       </button>
+               </nav>
+       
+              
+               <div className="sm:hidden">
+                 <button
+                   onClick={() => setMenuOpen(!menuOpen)}
+                   className="text-black-700 focus:outline-none"
+                 >
+                   {menuOpen ? "✖" : "☰"}
+                 </button>
+               </div>
+             </header>
 
        
         <div className="flex flex-1 justify-center py-5 px-4 sm:px-8 md:px-20 lg:px-40">

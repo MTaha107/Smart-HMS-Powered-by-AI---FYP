@@ -13,6 +13,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogin = async () => {
     setError('');
@@ -52,20 +53,44 @@ const Login = () => {
           setError(err.response?.data?.error || 'Login failed');
         }
   }
-
+const handleLogout = () => {
+  navigate(-1);
+  };
 
   return (
       <div className="relative flex flex-col min-h-screen w-full bg-slate-50">
         <div className="flex flex-col flex-1">
   
-          <header className="flex items-center border-b border-solid border-b-[#e7edf4] px-4 sm:px-6 lg:px-10 py-3">
-            <div className="flex items-center gap-2 sm:gap-4 text-[#0d141c] ">
-              <div className="flex items-center space-x-2">
-                    <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
-                  <Link to="/">  <p className='text-black font-bold'>MediCare</p></Link>
+            {/* Header */}
+                <header className="flex items-center justify-between border-b border-solid border-b-[#e7edf4] px-4 sm:px-6 lg:px-10 py-3">
+                  <div className="flex items-center gap-2 sm:gap-4 text-[#0d141c] ">
+                    <div className="flex items-center space-x-2">
+                          <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
+                          <p className='text-black font-bold'>Medi Care</p>
+                        </div>
                   </div>
-            </div>
-          </header>
+          
+                  {/* Desktop Navbar */}
+                  <nav className="hidden sm:flex sm:flex-1 justify-end gap-8">
+                   
+                      <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-black-700 font-bold transition-colors cursor-pointer hover:text-gray-500 "
+          >
+            <span className="hidden sm:inline cursor-pointer">Back</span>
+          </button>
+                  </nav>
+          
+                 
+                  <div className="sm:hidden">
+                    <button
+                      onClick={() => setMenuOpen(!menuOpen)}
+                      className="text-black-700 focus:outline-none"
+                    >
+                      {menuOpen ? "✖" : "☰"}
+                    </button>
+                  </div>
+                </header>
   
           <div className="flex flex-1 items-center justify-center px-3 sm:px-6">
             <div className="flex flex-col w-full max-w-[512px]">

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserData');
+const Doctors = require('../models/DoctorsData');
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
@@ -108,10 +109,20 @@ router.delete("/delete/:id",protect, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    const user = await User.findByIdAndDelete(req.params.id);
+    // Get the user first to retrieve their name
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    // If the user is a doctor, delete all associated DoctorsData entries with the same name
+    if (user.role === 'doctor') {
+      await Doctors.deleteMany({ name: user.name });
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(req.params.id);
+    
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     console.error(error);
